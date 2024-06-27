@@ -1,15 +1,34 @@
+# 5-Point-Stencil for solving Lu=1
 import numpy as np
 import matplotlib.pyplot as plt
+import linearalgebra as la
 
+def Ah(m, l, h):
+    M1 = (l-1) * (m-1)
+    Ah = np.zeros((M1, M1))
+    for k0 in range(m-1):
+        for k1 in range(m-1):
+            for i in range(l-1):
+                for j in range(l-1):
+                    if i == j:
+                        if k0 == k1:
+                            Ah[i + k0 * (l-1), j + k1 * (l-1)] = -4
+                        elif k0 == k1 - 1 or k0 == k1 + 1:
+                            Ah[i + k0 * (l-1), j + k1 * (l-1)] = 1
+                    elif (i == j - 1 or i == j + 1) and k0 == k1:
+                        Ah[i + k0 * (l-1), j + k1 * (l-1)] = 1
+    Ah /= h**2
+    return Ah
+"""
 errors = []
 
 for N in [10, 20, 40, 80]:
     l = m = N
     M1 = (l-1)*(m-1)
-      
+    Ah = la.tridiag(-1,4,-1,M1,M1)  
     qh = np.ones(M1)
-
     x0 = np.zeros(M1)
+    
     xk_gaussseidel0 = np.zeros(M1)
     error = []
     print("Calculating errors ...")
@@ -73,5 +92,5 @@ plt.show()
 #y = np.linspace(0, 1, N-1)
 #xs, ys = np.meshgrid(x, y)
 #ax.plot(xs.flatten(), ys.flatten(), xk_gaussseidel)
-#plt.show()
+#plt.show()"""
 
